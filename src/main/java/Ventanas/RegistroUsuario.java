@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
  * @author HP
  */
 public class RegistroUsuario extends javax.swing.JDialog {
+ private Usuario UsuarioConsultado;
 
     /**
      * Creates new form RegistroUsuario
@@ -113,6 +114,11 @@ public class RegistroUsuario extends javax.swing.JDialog {
         BotonEditar.setIcon(new javax.swing.ImageIcon("C:\\Users\\HP\\Documents\\NetBeansProjects\\proyecto_POO\\src\\Iconos\\create-sharp-icon.png")); // NOI18N
         BotonEditar.setText("Editar");
         BotonEditar.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        BotonEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonEditarActionPerformed(evt);
+            }
+        });
 
         BotonEliminar.setIcon(new javax.swing.ImageIcon("C:\\Users\\HP\\Documents\\NetBeansProjects\\proyecto_POO\\src\\Iconos\\delete-circle-icon.png")); // NOI18N
         BotonEliminar.setText("Eliminar");
@@ -332,7 +338,33 @@ public class RegistroUsuario extends javax.swing.JDialog {
     }//GEN-LAST:event_BotonCancelarActionPerformed
 
     private void BotonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonBuscarActionPerformed
-          
+      this.UsuarioConsultado = null;  
+      String IDs = CampoID.getText();
+      int ID = Integer.parseInt(IDs);
+      
+      if(IDs == null || IDs.trim().isEmpty()){
+      JOptionPane.showMessageDialog(this, "Escriba un ID para buscarlo", "ERROR", JOptionPane.ERROR_MESSAGE);
+      return;
+      }
+      
+      EntityManagerFactory conexionBD = Persistence.createEntityManagerFactory("proyecto_POOPU");
+      UsuarioJpaController crudUsuario = new UsuarioJpaController(conexionBD);
+      int totalUsuarios = crudUsuario.getUsuarioCount();
+      
+      if(totalUsuarios <= 0){
+      JOptionPane.showMessageDialog(this, "La BD esta vacia", "ERROR", JOptionPane.ERROR_MESSAGE);
+      return;
+      }
+      this.UsuarioConsultado = crudUsuario.findUsuario(ID);
+      if (this.UsuarioConsultado == null){
+      JOptionPane.showMessageDialog(this, "el usuario no existe", "ERROR", JOptionPane.ERROR_MESSAGE);
+      return;
+      }
+      CampoNombre.setText(UsuarioConsultado.getNombres());
+      CampoApellido.setText(UsuarioConsultado.getApellidos());
+      CampoDireccion.setText(UsuarioConsultado.getDireccion());
+      CampoCorreo.setText(UsuarioConsultado.getCorreo());
+      CampoContraseña.setText(UsuarioConsultado.getContraseña());
     }//GEN-LAST:event_BotonBuscarActionPerformed
 
     private void CampoIDKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_CampoIDKeyTyped
@@ -343,6 +375,21 @@ public class RegistroUsuario extends javax.swing.JDialog {
             evt.consume();
         }
     }//GEN-LAST:event_CampoIDKeyTyped
+
+    private void BotonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonEditarActionPerformed
+    if (this.UsuarioConsultado == null){
+    JOptionPane.showMessageDialog(this, "Busque un usuario antes");
+    return;
+    }
+    String IDs = CampoID.getText();
+    int ID = Integer.parseInt(IDs);
+    if(this.UsuarioConsultado != null && !this.UsuarioConsultado.getIdUsuario().equals(IDs)) {
+      String msj = "los datos del usuario a editar no corresponden con los datos del usuario consultado";
+      JOptionPane.showMessageDialog(this, msj, "ERROR", JOptionPane.ERROR_MESSAGE);
+      return;
+    }
+    
+    }//GEN-LAST:event_BotonEditarActionPerformed
 
     /**
      * @param args the command line arguments

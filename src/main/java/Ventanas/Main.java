@@ -103,7 +103,12 @@ public class Main extends javax.swing.JFrame {
 
         jMenu3.setText("Ver");
 
-        jMenuItem6.setText("jMenuItem6");
+        jMenuItem6.setText("Info");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItem6);
 
         jMenuItem7.setText("jMenuItem7");
@@ -166,6 +171,12 @@ public class Main extends javax.swing.JFrame {
        BA.setLocationRelativeTo(this);
        BA.setVisible(true);
     }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+      InfoPedida IP = new InfoPedida (this, true);
+      IP.setLocationRelativeTo(this);
+      IP.setVisible(true);
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     /**
      * @param args the command line arguments
