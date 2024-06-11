@@ -6,11 +6,7 @@ package Ventanas;
 
 import Clases.Usuario;
 import crud.UsuarioJpaController;
-import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.swing.JOptionPane;
