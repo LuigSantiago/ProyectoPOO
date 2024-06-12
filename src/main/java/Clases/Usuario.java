@@ -33,7 +33,6 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "Usuario.findByApellidos", query = "SELECT u FROM Usuario u WHERE u.apellidos = :apellidos"),
     @NamedQuery(name = "Usuario.findByCorreo", query = "SELECT u FROM Usuario u WHERE u.correo = :correo"),
     @NamedQuery(name = "Usuario.findByDireccion", query = "SELECT u FROM Usuario u WHERE u.direccion = :direccion"),
-    @NamedQuery(name = "Usuario.findByEmail", query = "SELECT u FROM Usuario u WHERE u.email = :email"),
     @NamedQuery(name = "Usuario.findByContrase\u00f1a", query = "SELECT u FROM Usuario u WHERE u.contrase\u00f1a = :contrase\u00f1a"),
     @NamedQuery(name = "Usuario.findByFechaRegistro", query = "SELECT u FROM Usuario u WHERE u.fechaRegistro = :fechaRegistro"),
     @NamedQuery(name = "Usuario.findByVerificado", query = "SELECT u FROM Usuario u WHERE u.verificado = :verificado"),
@@ -58,9 +57,6 @@ public class Usuario implements Serializable {
     @Basic(optional = false)
     @Column(name = "direccion", nullable = false, length = 90)
     private String direccion;
-    @Basic(optional = false)
-    @Column(name = "email", nullable = false, length = 80)
-    private String email;
     @Basic(optional = false)
     @Column(name = "contrase\u00f1a", nullable = false, length = 70)
     private String contraseña;
@@ -92,13 +88,12 @@ public class Usuario implements Serializable {
         this.idUsuario = idUsuario;
     }
 
-    public Usuario(Integer idUsuario, String nombres, String apellidos, String correo, String direccion, String email, String contraseña, Date fechaRegistro) {
+    public Usuario(Integer idUsuario, String nombres, String apellidos, String correo, String direccion, String contraseña, Date fechaRegistro) {
         this.idUsuario = idUsuario;
         this.nombres = nombres;
         this.apellidos = apellidos;
         this.correo = correo;
         this.direccion = direccion;
-        this.email = email;
         this.contraseña = contraseña;
         this.fechaRegistro = fechaRegistro;
     }
@@ -141,14 +136,6 @@ public class Usuario implements Serializable {
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getContraseña() {

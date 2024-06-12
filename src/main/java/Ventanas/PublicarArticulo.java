@@ -6,8 +6,8 @@ package Ventanas;
 
 import Clases.Articulo;
 import Clases.Usuario;
-import crud.ArticuloJpaController;
-import crud.UsuarioJpaController;
+import Crud.ArticuloJpaController;
+import Crud.UsuarioJpaController;
 import java.util.Date;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -225,7 +225,7 @@ public class PublicarArticulo extends javax.swing.JDialog {
         a1.setIdArticulo(idA);
         a1.setFechaLimite(fechaLimite);
         
-        EntityManagerFactory conexion = Persistence.createEntityManagerFactory("proyecto_POOPU");
+        EntityManagerFactory conexion = Persistence.createEntityManagerFactory("com.mycompany_proyecto_POO_jar_1.0-SNAPSHOTPU");
         
         ArticuloJpaController crudArticulo = new ArticuloJpaController(conexion);
         

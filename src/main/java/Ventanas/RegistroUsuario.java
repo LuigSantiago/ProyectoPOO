@@ -5,8 +5,12 @@
 package Ventanas;
 
 import Clases.Usuario;
-import crud.UsuarioJpaController;
+import Crud.UsuarioJpaController;
+import Crud.exceptions.IllegalOrphanException;
+import Crud.exceptions.NonexistentEntityException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.swing.JOptionPane;
@@ -123,6 +127,11 @@ public class RegistroUsuario extends javax.swing.JDialog {
         BotonEliminar.setIcon(new javax.swing.ImageIcon("C:\\Users\\HP\\Documents\\NetBeansProjects\\proyecto_POO\\src\\Iconos\\delete-circle-icon.png")); // NOI18N
         BotonEliminar.setText("Eliminar");
         BotonEliminar.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        BotonEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonEliminarActionPerformed(evt);
+            }
+        });
 
         CampoID.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -307,7 +316,7 @@ public class RegistroUsuario extends javax.swing.JDialog {
         u1.setIdUsuario(idU);
         u1.setFechaRegistro(fechaActual);
         
-        EntityManagerFactory conexion = Persistence.createEntityManagerFactory("proyecto_POOPU");
+        EntityManagerFactory conexion = Persistence.createEntityManagerFactory("com.mycompany_proyecto_POO_jar_1.0-SNAPSHOTPU");
         
         UsuarioJpaController crudUsuario = new UsuarioJpaController(conexion);
         
@@ -347,7 +356,7 @@ public class RegistroUsuario extends javax.swing.JDialog {
       return;
       }
       
-      EntityManagerFactory conexionBD = Persistence.createEntityManagerFactory("proyecto_POOPU");
+      EntityManagerFactory conexionBD = Persistence.createEntityManagerFactory("com.mycompany_proyecto_POO_jar_1.0-SNAPSHOTPU");
       UsuarioJpaController crudUsuario = new UsuarioJpaController(conexionBD);
       int totalUsuarios = crudUsuario.getUsuarioCount();
       
@@ -388,8 +397,65 @@ public class RegistroUsuario extends javax.swing.JDialog {
       JOptionPane.showMessageDialog(this, msj, "ERROR", JOptionPane.ERROR_MESSAGE);
       return;
     }
-    
+    String nombres = CampoNombre.getText();
+    String apellidos = CampoApellido.getText();
+    String direccion = CampoDireccion.getText();
+    String Correo = CampoCorreo.getText();
+    char[] Pass = CampoContraseña.getPassword();
+    String Contraseña = String.valueOf(Pass);
+    EntityManagerFactory conexionBD = Persistence.createEntityManagerFactory("com.mycompany_proyecto_POO_jar_1.0-SNAPSHOTPU");
+    UsuarioJpaController crudUsuario = new UsuarioJpaController(conexionBD);
+     try {
+         crudUsuario.edit(UsuarioConsultado);
+            JOptionPane.showMessageDialog(this, "Usuario actualizado");
+     } catch (NonexistentEntityException ex) {
+         JOptionPane.showMessageDialog(this, "Este usuario no existe", "ERROR", JOptionPane.ERROR_MESSAGE);
+         return;
+     } catch (Exception ex) {
+         JOptionPane.showMessageDialog(this, "No puede editar a este usuario", "ERROR", JOptionPane.ERROR_MESSAGE);
+         return;
+     }
     }//GEN-LAST:event_BotonEditarActionPerformed
+
+    private void BotonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonEliminarActionPerformed
+   //1
+    int ID = Integer.parseInt(CampoID.getText());
+    //2
+    if(ID == 0){
+        JOptionPane.showMessageDialog(this, "Digite un ID", "ERROR", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    //3
+    EntityManagerFactory conexionBD = Persistence.createEntityManagerFactory("com.mycompany_proyecto_POO_jar_1.0-SNAPSHOTPU");
+    UsuarioJpaController crudUsuario = new UsuarioJpaController(conexionBD);
+    int totalUsuarios = crudUsuario.getUsuarioCount();
+    if (totalUsuarios <= 0) {
+    JOptionPane.showMessageDialog(this, "la BD esta vacia", "ERROR", JOptionPane.ERROR_MESSAGE);
+    return;
+    }
+    //4
+    if (this.UsuarioConsultado.getIdUsuario().equals(ID)){
+    JOptionPane.showMessageDialog(this, "Busque un usuario antes", "ERROR", JOptionPane.ERROR_MESSAGE);
+    return;
+    }
+    int opcion = JOptionPane.showConfirmDialog(this, "¿Seguro que desea eliminar?", "Si - No", 
+            JOptionPane.YES_NO_OPTION, 
+            JOptionPane.QUESTION_MESSAGE);
+    if(opcion == JOptionPane.YES_OPTION) {
+        try {
+            crudUsuario.destroy(ID);
+            JOptionPane.showMessageDialog(this, "usuario eliminado");
+            this.UsuarioConsultado = null;
+        } catch (IllegalOrphanException ex) {
+            JOptionPane.showMessageDialog(this, "no puede eliminar este usuario", "ERROR", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(RegistroUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NonexistentEntityException ex) {
+            JOptionPane.showMessageDialog(this, "no existe este usuario", "ERROR", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(RegistroUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+    }
+    }//GEN-LAST:event_BotonEliminarActionPerformed
 
     /**
      * @param args the command line arguments
