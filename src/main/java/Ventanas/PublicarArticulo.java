@@ -6,8 +6,8 @@ package Ventanas;
 
 import Clases.Articulo;
 import Clases.Usuario;
-import Crud.ArticuloJpaController;
-import Crud.UsuarioJpaController;
+import crud.ArticuloJpaController;
+import crud.UsuarioJpaController;
 import java.util.Date;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
